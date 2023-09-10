@@ -1,22 +1,22 @@
-GET http://localhost:3010/todos/?status=TO%20DO
+GET http://3008/todos/?status=TO%20DO
 ###
 
-GET http://localhost:3010/todos/?priority=HIGH
+GET http://3008/todos/?priority=HIGH
 ###
 
-GET http://localhost:3010/todos/?priority=HIGH&status=IN%20PROGRESS
+GET http://3008/todos/?priority=HIGH&status=IN%20PROGRESS
 ###
 
-GET http://localhost:3010/todos/?search_q=Buy
+GET http://3008/todos/?search_q=Buy
 ###
 
-GET http://localhost:3010/todos/?category=WORK&status=DONE
+GET http://3008/todos/?category=WORK&status=DONE
 ###
 
-GET http://localhost:3010/todos/?category=HOME
+GET http://3008/todos/?category=HOME
 ###
 
-GET http://localhost:3010/todos/?category=LEARNING&priority=HIGH
+GET http://3008/todos/?category=LEARNING&priority=HIGH
 ###
 
 
@@ -24,13 +24,13 @@ GET http://localhost:3010/todos/?category=LEARNING&priority=HIGH
 
 
 
-GET http://localhost:3010/todos/1/
+GET http://3008/todos/1/
 ####
 
 
-GET http://localhost:3010/agenda/?date=2021-12-12
+GET http://3008/agenda/?date=2021-12-12
 ###
-POST http://localhost:3010/todos/
+POST http://3008/todos/
 Content-Type: application/json
 
 {
@@ -43,14 +43,14 @@ Content-Type: application/json
 }
 ###
 
-PUT  http://localhost:3010/todos/2/
+PUT  http://3008/todos/2/
 Content-Type: application/json
 
 {
     "status": "DONE"
 }
 ###
-PUT  http://localhost:3010/todos/2/
+PUT  http://3008/todos/2/
 Content-Type: application/json
 
 {
@@ -58,6 +58,6 @@ Content-Type: application/json
 }
 ###
 
-DELETE http://localhost:3010/todos/2/
+DELETE http://3008/todos/2/
 
 ###

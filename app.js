@@ -19,7 +19,7 @@ const initializeDBAndServer = async () => {
       filename: dbPath,
       driver: sqlite3.Database,
     });
-    app.listen(3010, () => {
+    app.listen(3008, () => {
       console.log("Server is running at http:/localhost:3010/");
     });
   } catch (e) {
@@ -44,65 +44,67 @@ const checkRequestsQueries = async (request, response, next) => {
     }
   }
 
-  if (priority !== undefined) {
-    const priorityArray = ["HIGH", "MEDIUM", "LOW"];
-    const priorityIsInArray = priorityArray.includes(priority);
-    if (priorityIsInArray === true) {
-      request.priority = priority;
-    } else {
-      response.status(400);
-      response.send("Invalid Todo Priority");
-      return;
+const categoryArray = ["HOME","WORK","LEARNING"];
+const priorityArray = ["HIGH","MEDIUM","LOW"];
+const statusArray = ["TO DO","IN PROGRESS","DONE"];
+
+//first middleware function for queries
+const checkQueries = async(request ,response, next)=>{
+    const {search_q, priority, category, status, date} = request.query;
+    if (priority!==undefined){
+        if(priorityArray.includes(priority)){
+            request.priority = priority;
+        }
+        else{
+            response.status(400);
+            response.send("Invalid Todo Priority");
+            return;
+        }
     }
-  }
-
-  if (status !== undefined) {
-    const statusArray = ["TO DO", "IN PROGRESS", "DONE"];
-    const statusIsInArray = statusArray.includes(status);
-    if (statusIsInArray === true) {
-      request.status = status;
-    } else {
-      response.status(400);
-      response.send("Invalid Todo Status");
-      return;
+    if (category!==undefined){
+        if(categoryArray.includes(category)){
+            request.category = category;
+        }
+        else{
+            response.status(400);
+            response.send("Invalid Todo category");
+            return;
+        }
     }
-  }
-
-  if (date !== undefined) {
-    try {
-      const myDate = new Date(date);
-
-      const formatedDate = format(new Date(date), "yyyy-MM-dd");
-      console.log(formatedDate, "f");
-      const result = toDate(
-        new Date(
-          `${myDate.getFullYear()}-${myDate.getMonth() + 1}-${myDate.getDate()}`
-        )
-      );
-      console.log(result, "r");
-      console.log(new Date(), "new");
-
-      const isValidDate = await isValid(result);
-      console.log(isValidDate, "V");
-      if (isValidDate === true) {
-        request.date = formatedDate;
-      } else {
-        response.status(400);
-        response.send("Invalid Due Date");
-        return;
-      }
-    } catch (e) {
-      response.status(400);
-      response.send("Invalid Due Date");
-      return;
+    if (status!==undefined){
+        if(statusArray.includes(status)){
+            request.status = status;
+        }
+        else{
+            response.status(400);
+            response.send("Invalid Todo Priority");
+            return;
+        }
     }
-  }
-
-  request.todoId = todoId;
-  request.search_q = search_q;
-
-  next();
-};
+    if (date!==undefined){
+        try{
+            const myDate = new Date(date);
+            const result = new Date(`${myDate.getFullYear()}=${myDate.getMonth() + 1}-${myDate.getDate()}`);
+            const formatDate = format(result,'yyyy-MM-dd');
+            console.log(formatDate);
+            const isValidDate = isValid(result);
+            console.log(isValidDate);
+            if(isValidDate === true){
+                request.date = formatDate;
+            }
+            else{
+                response.status(400);
+                response.send("Invalid Due Date");
+                return;
+            }
+        }
+        catch (e) {
+            console.log(e.message)
+        }
+    }
+    request.search_q = search_q;
+    next();
+}
 
 const checkRequestsBody = (request, response, next) => {
   const { id, todo, category, priority, status, dueDate } = request.body;
@@ -147,12 +149,10 @@ const checkRequestsBody = (request, response, next) => {
 
   if (dueDate !== undefined) {
     try {
-      const myDate = new Date(dueDate);
       const formatedDate = format(new Date(dueDate), "yyyy-MM-dd");
       console.log(formatedDate);
       const result = toDate(new Date(formatedDate));
       const isValidDate = isValid(result);
-      console.log(isValidDate);
       console.log(isValidDate);
       if (isValidDate === true) {
         request.dueDate = formatedDate;
