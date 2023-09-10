@@ -1,0 +1,36 @@
+//API 1
+GET http://localhost:3010/todos/
+###
+
+// API 2
+GET http://localhost:3010/todos/6
+###
+
+// API 3
+ GET http://localhost:3010/agenda/?date=2021-12-12
+###
+
+// API 4
+POST http://localhost:3010/todos/
+Content-Type: application/json
+
+{
+  "id": 6,
+ "todo": "Finalize event theme",
+ "priority": "LOW",
+ "status": "TO DO",
+ "category": "HOME",
+ "dueDate": "2021-02-2"
+}
+###
+
+// API 5
+PUT http://localhost:3010/todos/6
+Content-Type: application/json
+
+{ "todo": "Break the ICE in Team-5 a bit more" }
+###
+
+// API 6
+DELETE http://localhost:3010/todos/6
+###
